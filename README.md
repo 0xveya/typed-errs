@@ -33,6 +33,16 @@ stores that enum plus an optional `Diagnostic`, namespace, and context message.
 The package also provides `Some`, `Nothing`, `Option`, `catch_bubble`, and
 `catch_nothing`.
 
+## Where I use it
+
+This is my internal error-handling base for 42 projects. The generic `Result`,
+`Option`, diagnostics, and bubbling helpers come from
+`coding/42/cc/pac-man`; the same pattern is used throughout
+`coding/42/cc/rag-against-the-machine`, `call_me_maybe`, and `fly-in` for CLI,
+file parsing, storage, indexing, watcher, and web-service failures. Projects
+define their own error `Enum` and return `Ok` or `Err` instead of copying the
+implementation again.
+
 ## Dependencies
 
 No runtime dependencies. Python 3.10 or newer.
