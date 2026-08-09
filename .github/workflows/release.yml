@@ -1,7 +1,7 @@
-name: Publish to PyPI
+name: Publish every commit to PyPI
 on:
-  release:
-    types: [published]
+  push:
+    branches: [master]
 permissions:
   contents: read
 jobs:
@@ -10,6 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v7
+      - run: uv version "0.0.${GITHUB_RUN_NUMBER}"
       - run: uv build
       - uses: actions/upload-artifact@v4
         with:

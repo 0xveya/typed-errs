@@ -1,6 +1,6 @@
 [project]
 name = "typed-errs"
-version = "0.1.0"
+version = "0.0.0"
 description = "Small typed Result and Option values for explicit Python error handling"
 readme = "README.md"
 requires-python = ">=3.10"

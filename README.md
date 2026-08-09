@@ -39,7 +39,6 @@ No runtime dependencies. Python 3.10 or newer.
 
 ## Development and release
 
-Run `mise run check` for lint, type checks, tests, and a package build. Bump the
-version in `pyproject.toml`, commit it, then create a GitHub Release. The release
-workflow publishes through PyPI Trusted Publishing. `mise run publish` is also
-available for a manual `uv publish` when credentials are configured.
+Run `mise run check` for lint, type checks, tests, and a package build. Every
+push to `master` publishes a unique `0.0.<CI run>` ZeroVer version through PyPI Trusted
+Publishing. `mise run publish` remains available for manual publishing.
