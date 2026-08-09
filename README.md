@@ -37,11 +37,14 @@ The package also provides `Some`, `Nothing`, `Option`, `catch_bubble`, and
 
 This is my internal error-handling base for 42 projects. The generic `Result`,
 `Option`, diagnostics, and bubbling helpers come from
-`coding/42/cc/pac-man`; the same pattern is used throughout
-`coding/42/cc/rag-against-the-machine`, `call_me_maybe`, and `fly-in` for CLI,
-file parsing, storage, indexing, watcher, and web-service failures. Projects
-define their own error `Enum` and return `Ok` or `Err` instead of copying the
-implementation again.
+[Pacman](https://github.com/Valentins-and-Veyas-42-group-projects/pac-man), a
+work-in-progress group project in the 42 organization.
+The same pattern is used throughout
+[RAG Against the Machine](https://github.com/0xveya/42-rag-against-the-machine),
+[call_me_maybe](https://github.com/0xveya/call_me_maybe), and
+[fly-in](https://github.com/0xveya/42-fly-in) for CLI, file parsing, storage,
+indexing, watcher, and web-service failures. Projects define their own error
+`Enum` and return `Ok` or `Err` instead of copying the implementation again.
 
 ## Dependencies
 
