@@ -1,5 +1,10 @@
 # typed-errs
 
+[![PyPI](https://img.shields.io/pypi/v/typed-errs)](https://pypi.org/project/typed-errs/)
+[![CI](https://github.com/0xveya/typed-errs/actions/workflows/ci.yml/badge.svg)](https://github.com/0xveya/typed-errs/actions/workflows/ci.yml)
+
+**[View typed-errs on PyPI](https://pypi.org/project/typed-errs/)**
+
 Small, typed `Result` and `Option` values for Python code that wants explicit
 failure paths without exceptions crossing API boundaries.
 
@@ -33,6 +38,12 @@ stores that enum plus an optional `Diagnostic`, namespace, and context message.
 The package also provides `Some`, `Nothing`, `Option`, `catch_bubble`, and
 `catch_nothing`.
 
+The `.q` property is intended for functions decorated with `catch_bubble`: it
+unwraps `Ok` and returns the first `Err` from the decorated function. For normal
+branching, use `isinstance(result, Ok)` / `isinstance(result, Err)`, `match`, or
+the mapping and inspection methods. See the runnable
+[pipeline example](examples/pipeline.py) for validation and early returns.
+
 ## Where I use it
 
 This is my internal error-handling base for 42 projects. The generic `Result`,
@@ -49,6 +60,19 @@ indexing, watcher, and web-service failures. Projects define their own error
 ## Dependencies
 
 No runtime dependencies. Python 3.10 or newer.
+
+## Use and contributions
+
+This is a personal library, but it is not private or locked to my projects.
+You may use it in general Python work and in 42 projects under the MIT license;
+just follow the rules that apply to your campus and assignment.
+
+Contributions are welcome: open an issue or send a pull request. I do not care
+whether a contribution is written by hand, AI-assisted, or generated another
+way; I care about whether it is correct, tested, understandable, and a good fit.
+Because this is opinionated personal infrastructure, pull requests are reviewed
+selectively and are likely to be rejected unless they clearly improve the
+library without making it harder to maintain.
 
 ## Development and release
 
