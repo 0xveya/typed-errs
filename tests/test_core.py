@@ -38,6 +38,13 @@ def test_map_err_with_receives_the_complete_error() -> None:
     assert mapped.diagnostic == source.diagnostic
 
 
+def test_error_short_circuits_result_pipeline() -> None:
+    source = Err(Problem.BAD_INPUT)
+
+    assert source.map(lambda value: str(value)) is source
+    assert source.and_then(lambda _value: Ok("unreachable")) is source
+
+
 def test_result_bubbles_an_error() -> None:
     @catch_bubble
     def operation() -> Result[str, Problem]:

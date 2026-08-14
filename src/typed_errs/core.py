@@ -379,6 +379,23 @@ class Err(Generic[E]):
         """Transform this complete error value into another error domain."""
         return func(self)
 
+    def map(self, _func: Callable[[T], U]) -> Err[E]:
+        """Leave an Err unchanged when mapping a successful value."""
+        return self
+
+    def map_err(self, func: Callable[[E], F]) -> Err[F]:
+        """Transform the contained error while preserving its context."""
+        return Err(
+            func(self.error),
+            diagnostic=self.diagnostic,
+            context_msg=self.context_msg,
+            namespace=self.namespace,
+        )
+
+    def and_then(self, _func: Callable[[T], Result[U, E]]) -> Err[E]:
+        """Leave an Err unchanged instead of running a fallible transform."""
+        return self
+
     @property
     def q(self) -> NoReturn:
         """Propagate this error to a ``catch_bubble`` wrapper.
