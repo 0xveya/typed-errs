@@ -34,9 +34,15 @@ def greeting() -> Result[str, ReadError]:
 ```
 
 Define each application's error categories as normal `Enum` classes. `Err`
-stores that enum plus an optional `Diagnostic`, namespace, and context message.
+stores that enum plus `diagnostic: Option[Diagnostic]`, a namespace, and a
+context message. `Diagnostic.help_msg` is likewise an `Option[str]`, so absence
+uses `Nothing()` at every layer instead of crossing through `None`. Construct
+present values with `Some(Diagnostic(...))` and `Some("help text")`.
+
 The package also provides `Some`, `Nothing`, `Option`, `catch_bubble`, and
-`catch_nothing`.
+`catch_nothing`. Result pipelines have the same `map`, `map_err`, `and_then`,
+and `map_err_with` surface on both `Ok` and `Err`; error branches simply short
+circuit operations that only transform successful values.
 
 The `.q` property is intended for functions decorated with `catch_bubble`: it
 unwraps `Ok` and returns the first `Err` from the decorated function. For normal
