@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable, Iterator
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from functools import wraps
 from typing import (
@@ -24,6 +24,10 @@ U = TypeVar("U")
 P = ParamSpec("P")
 
 
+def _nothing() -> Nothing:
+    return Nothing()
+
+
 @dataclass(frozen=True)
 class Diagnostic:
     """Stores the error location and context for diagnostic reporting."""
@@ -33,7 +37,7 @@ class Diagnostic:
     line_text: str
     col_start: int
     col_end: int
-    help_msg: str | None = None
+    help_msg: Option[str] = field(default_factory=_nothing)
 
 
 class BubbleUpError(Exception):
@@ -189,6 +193,10 @@ class Ok(Generic[T]):
         """
         return self
 
+    def map_err_with(self, _func: Callable[[Err[E]], Err[F]]) -> Ok[T]:
+        """Leave an Ok unchanged when mapping the complete error value."""
+        return self
+
     def inspect(self, func: Callable[[T], object]) -> Ok[T]:
         """Call a function with the successful value without changing it.
 
@@ -304,7 +312,7 @@ class Err(Generic[E]):
     """Wrap failure results with error variants and optional diagnostics."""
 
     error: E
-    diagnostic: Diagnostic | None = None
+    diagnostic: Option[Diagnostic] = field(default_factory=_nothing)
     context_msg: str | None = None
     PROJECT_NAME: ClassVar[str] = "pacman"
     namespace: str | None = None
@@ -338,12 +346,12 @@ class Err(Generic[E]):
 
         print(f"{BOLD}Error:{RESET} {PINK}{full_namespace}{RESET}\n")
 
-        if not self.diagnostic:
+        if isinstance(self.diagnostic, Nothing):
             print(f" {RED}×{RESET} {BOLD}Operation failed{RESET}")
             print(f"   {RED}╰─▶{RESET} {err_name_str.replace('_', ' ').title()}")
             return
 
-        d = self.diagnostic
+        d = self.diagnostic.value
         summary = self.context_msg or "Validation failed"
         print(f" {RED}×{RESET} {BOLD}{summary}{RESET}")
         print(
@@ -364,8 +372,12 @@ class Err(Generic[E]):
             padding = " " * d.col_start
             print(f"   {BLUE}·{RESET} {padding}{RED}{carets}{RESET}")
 
-        if d.help_msg:
-            print(f"\n   {CYAN}help:{RESET} {d.help_msg}")
+        if isinstance(d.help_msg, Some):
+            print(f"\n   {CYAN}help:{RESET} {d.help_msg.value}")
+
+    def map_err_with(self, func: Callable[[Err[E]], Err[F]]) -> Err[F]:
+        """Transform this complete error value into another error domain."""
+        return func(self)
 
     @property
     def q(self) -> NoReturn:
